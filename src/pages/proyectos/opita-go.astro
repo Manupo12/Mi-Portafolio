@@ -1,0 +1,18 @@
+---
+
+// DESCRIPCIÓN: Página de detalle para Opita Go, usando el layout especializado para apps.
+
+import AppProjectLayout from '../../layouts/AppProjectLayout.astro';
+import { PROYECTOS } from '../../data/projects.tsx';
+
+// 1. Buscamos el proyecto específico en nuestro array de datos usando su 'id' único.
+const projectData = PROYECTOS.find(p => p.id === 'opita-go');
+---
+
+<AppProjectLayout frontmatter={projectData}>
+    
+    {projectData?.contenido.map(parrafo => (
+        <p>{parrafo}</p>
+    ))}
+    
+</AppProjectLayout>

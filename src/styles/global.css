@@ -1,0 +1,18 @@
+/**
+ * Archivo: src/styles/global.css
+ * Fecha: 5 de septiembre de 2025
+ * Propósito: Estilos globales y personalizados para el portafolio.
+ */
+
+/* 1. Importación de Tailwind CSS v4. */
+@import "tailwindcss";
+
+/* 2. Ajuste para el Header Fijo.
+   Esta regla le dice al navegador que cuando salte a una sección (ej. #proyectos),
+   deje un espacio de 90px en la parte superior. Esto evita que el header
+   tape el contenido de la sección. 'scroll-behavior: smooth' ya está
+   gestionado por la clase 'scroll-smooth' de Tailwind en el HTML.
+*/
+html {
+  scroll-padding-top: 90px;
+}

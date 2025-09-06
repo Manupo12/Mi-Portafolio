@@ -1,0 +1,62 @@
+---
+// Componente `TechMarquee` — crea una sección en movimiento (marquee) con
+// una lista de tecnologías/skills que se desplazan horizontalmente.
+// - Importa `MarqueeItem` para renderizar cada elemento individualmente.
+// - Duplica el array `skills` en `extendedSkills` para conseguir un efecto
+//   de bucle continuo sin huecos (primera copia seguida de la segunda).
+// - No se cambia la lógica del componente, solo se añaden comentarios
+//   explicativos para entender mejor cada parte.
+
+// Import del componente que renderiza un item (icono + texto o fallback)
+import MarqueeItem from './MarqueeItem.astro';
+
+// Props: recibe `skills` — array de strings con nombres de tecnologías.
+interface Props {
+    skills: string[];
+}
+const { skills } = Astro.props;
+
+// Duplicamos la lista para permitir la animación continua. La animación
+// desplaza el contenedor hasta -50%, por eso la segunda copia completa
+// asegura que siempre haya elementos visibles cuando la primera termine.
+const extendedSkills = [...skills, ...skills];
+---
+
+<div class="w-full overflow-hidden">
+</div>
+
+<!-- Contenedor principal del marquee: overflow-hidden para ocultar el desbordamiento
+     y permitir que solo la porción visible se muestre en pantalla. -->
+<div class="w-full overflow-hidden">
+    <!--
+        .marquee-content es el wrapper que se anima horizontalmente.
+        - Tiene display:flex para colocar los items en una fila.
+        - gap-8 separa visualmente los ítems.
+        - Cada item usa `flex-shrink-0` para evitar que se reduzca su ancho
+          cuando la fila sea más larga que el contenedor visible.
+    -->
+    <div class="marquee-content flex gap-8">
+        {extendedSkills.map(skill => (
+            <div class="flex-shrink-0">
+                {/* Renderizamos cada tecnología mediante el componente reutilizable
+                    `MarqueeItem`. No cambiamos su API: le pasamos `name={skill}`. */}
+                <MarqueeItem name={skill} />
+            </div>
+        ))}
+    </div>
+</div>
+
+<style>
+    .marquee-content {
+        animation: marquee 40s linear infinite;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0%);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+</style>

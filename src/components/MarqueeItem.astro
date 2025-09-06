@@ -1,0 +1,53 @@
+---
+// ARCHIVO: src/components/MarqueeItem.astro
+// DESCRIPCIÓN (español):
+// - Componente pequeño que muestra el icono o las iniciales de una tecnología
+//   junto con su nombre. Se usa en listas tipo "marquee" o carruseles de skills.
+// - No modifica comportamiento; solo renderiza en función de la prop `name`.
+
+// Importamos el mapa de iconos (clave: nombre normalizado -> markup SVG)
+import { TECH_ICON_MAP } from '../utils/techIcons.ts';
+
+// Tipado/props: esperamos recibir `name` (string) vía `Astro.props`.
+interface Props {
+    name: string;
+}
+const { name } = Astro.props;
+
+// Normalizamos el nombre para buscar su icono en el mapa (todo en minúsculas)
+const normalizedName = name.toLowerCase();
+// iconContent será el marcado SVG (string) si existe en TECH_ICON_MAP, o undefined
+const iconContent = TECH_ICON_MAP.get(normalizedName);
+
+// getInitials: genera iniciales/display corto cuando no existe un icono SVG.
+// - Mantiene acrónimos conocidos (p.ej. API, XML).
+// - Si el nombre tiene varias palabras toma la primera letra de cada palabra.
+// - Si es una sola palabra devuelve las primeras 3 letras en mayúscula.
+function getInitials(name: string): string {
+    const acronyms = ['MVVM', 'XML', 'UI/UX', 'DSL', 'API'];
+    const upperCaseName = name.toUpperCase();
+    if (acronyms.includes(upperCaseName)) return upperCaseName;
+    const words = name.split(' ');
+    if (words.length > 1) return words.map(word => word[0]).join('').toUpperCase();
+    return name.slice(0, 3).toUpperCase();
+}
+---
+
+<div class="flex flex-col items-center justify-center gap-2 text-center">
+    <!-- Contenedor del "avatar" del technology: icono SVG o iniciales -->
+    <div class="flex items-center justify-center w-12 h-12 rounded-lg border bg-gray-800 border-gray-700 text-gray-300">
+        {
+            // Si existe un icono en el mapa, lo inyectamos como HTML (SVG) usando set:html
+            // La clase `[&>svg]:...` aplica tamaño y fill al SVG hijo.
+            iconContent ? (
+                <div class="[&>svg]:w-7 [&>svg]:h-7 [&>svg]:fill-current" set:html={iconContent} />
+            ) : (
+                // Si no hay icono, mostramos iniciales generadas por getInitials(name)
+                <span class="text-base font-bold tracking-tighter text-gray-400">{getInitials(name)}</span>
+            )
+        }
+    </div>
+
+    <!-- Nombre completo de la tecnología; `whitespace-nowrap` evita que se parta en varias líneas -->
+    <span class="text-xs text-gray-400 font-medium whitespace-nowrap">{name}</span>
+</div>

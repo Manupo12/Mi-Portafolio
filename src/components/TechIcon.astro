@@ -1,0 +1,66 @@
+---
+// - Componente flexible para mostrar el icono de una tecnología o un fallback
+//   con iniciales cuando no existe el SVG en `TECH_ICON_MAP`.
+// - Soporta dos tamaños: 'normal' (con label) y 'small' (solo icono).
+
+import { TECH_ICON_MAP } from '../utils/techIcons.ts';
+
+// Props esperadas:
+// - name: nombre de la tecnología (string)
+// - size: 'normal' | 'small' (opcional, por defecto 'normal')
+interface Props {
+    name: string;
+    size?: 'normal' | 'small';
+}
+// Extraemos props de Astro y aplicamos valor por defecto a `size`.
+const { name, size = 'normal' } = Astro.props;
+
+// Normalizamos el nombre para lookup en el mapa de iconos (claves en minúscula)
+const normalizedName = name.toLowerCase();
+const iconContent = TECH_ICON_MAP.get(normalizedName);
+
+// getInitials: genera un fallback textual cuando no hay icono SVG disponible.
+// - Preserva acrónimos conocidos (API, XML, etc.).
+// - Para nombres compuestos toma la primera letra de cada palabra.
+// - Para nombres simples devuelve las 3 primeras letras en mayúscula.
+function getInitials(name: string): string {
+    const acronyms = ['MVVM', 'XML', 'UI/UX', 'DSL', 'API'];
+    const upperCaseName = name.toUpperCase();
+    if (acronyms.includes(upperCaseName)) {
+        return upperCaseName;
+    }
+    const words = name.split(' ');
+    if (words.length > 1) {
+        return words.map(word => word[0]).join('').toUpperCase();
+    }
+    return name.slice(0, 3).toUpperCase();
+}
+
+// Title usado en title attribute (tooltip)
+const title = name;
+---
+
+{size === 'normal' ? (
+    <!-- Variante 'normal': icono grande con etiqueta (title) debajo -->
+    <div class="flex flex-col items-center gap-2 text-center" title={title}>
+        <div class="flex items-center justify-center w-16 h-16 rounded-xl border bg-gray-800 border-gray-700 text-gray-300">
+            {iconContent ? (
+                <!-- Si hay SVG en el mapa, lo inyectamos y aplicamos tamaño al svg hijo -->
+                <div class="[&>svg]:w-8 [&>svg]:h-8 [&>svg]:fill-current" set:html={iconContent} />
+            ) : (
+                <!-- Fallback textual: iniciales generadas por getInitials -->
+                <span class="text-xl font-black tracking-tighter text-gray-400">{getInitials(name)}</span>
+            )}
+        </div>
+        <span class="text-sm font-medium w-20 truncate text-gray-300">{title}</span>
+    </div>
+) : (
+    <!-- Variante 'small': solo icono (sin label) para listas compactas -->
+    <div class="flex items-center justify-center w-12 h-12 rounded-lg border bg-gray-800 border-gray-700 text-gray-300" title={title}>
+        {iconContent ? (
+            <div class="[&>svg]:w-7 [&>svg]:h-7 [&>svg]:fill-current" set:html={iconContent} />
+        ) : (
+            <span class="text-base font-bold tracking-tighter text-gray-400">{getInitials(name)}</span>
+        )}
+    </div>
+)}

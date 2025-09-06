@@ -1,0 +1,173 @@
+---
+
+// Imports de componentes reutilizables y utilidades visuales.
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Contacto from '../components/Contacto.astro';
+import AnimateOnScroll from '../components/AnimateOnScroll.jsx';
+import ProfileImageAnimation from '../components/ProfileImageAnimation.jsx';
+import { DemoShowcase } from '../components/DemoShowcase.tsx';
+import { ProjectShowcase } from '../components/ProjectShowcase.tsx';
+import CardCertification from '../components/cards/CardCertification.astro';
+import TechMarquee from '../components/TechMarquee.astro';
+import { Github, Linkedin, Mail, Download, Eye } from 'lucide-react';
+import WhatsAppIcon from '../assets/icons/whatsapp.svg?raw';
+import '../styles/global.css';
+
+// Datos estáticos importados desde /src/data. Estos arrays alimentan las
+// secciones (proyectos, habilidades, certificaciones).
+import { PROYECTOS } from '../data/projects.tsx';
+import { HABILIDADES } from '../data/skills.ts';
+import { CERTIFICATIONS } from '../data/certifications.ts';
+
+// Constantes: número de WhatsApp público y URL construida para enlazar.
+// Nota: mantener el número en formato internacional sin signos para wa.me.
+const WHATSAPP_NUMBER = "573202070445"; // Tu número en formato internacional
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+---
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Manuel Villanueva | Desarrollador de Software</title>
+    <meta name="description" content="Portafolio de Manuel Villanueva, un desarrollador de software de Neiva especializado en aplicaciones móviles Android y desarrollo web. Descubre mis proyectos y habilidades." />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-950 text-gray-200 font-sans">
+    <!-- Fondo decorativo detrás del contenido: patrón radial sutil -->
+    <div class="absolute inset-0 -z-10 h-full w-full bg-gray-950 bg-[radial-gradient(#1e29b_1px,transparent_1px)] [background-size:32px_32px]"></div>
+
+    <!-- Cabecera del sitio (navegación, logo). Componente importado -->
+    <Header />
+
+    <!-- Contenedor principal: ancho máximo y padding lateral -->
+    <main class="max-w-4xl mx-auto px-6">
+
+        <!-- SECCIÓN: INICIO / HERO -->
+        <section id="inicio" class="min-h-screen flex items-center">
+            <div class="w-full">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- Columna de texto: presentación, CV y enlaces sociales -->
+                    <div class="space-y-4 text-center md:text-left">
+                        <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-white">Hola, soy <span class="text-emerald-400">Manuel Villanueva</span></h1>
+                        <!-- Descripción corta: puesto y especialidad -->
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-300">Desarrollo Móvil Nativo (Android) y Desarrollo Web</h2>
+                        <!-- Párrafo introductorio: foco en proyectos personales y aprendizaje -->
+                        <p class="text-gray-400 max-w-md mx-auto md:mx-0">Soy un desarrollador junior que va más allá de la teoría. Proyectos personales como Vertrex son mi campo de pruebas para aplicar un aprendizaje constante y materializar mi iniciativa en soluciones funcionales.</p>
+                        <!-- Acciones principales: descargar/ver CV y enlaces sociales -->
+                        <div class="pt-8 flex flex-col items-center md:items-start gap-6">
+                            <div class="flex flex-wrap gap-4">
+                                <!-- Botón para descargar el CV (archivo local) -->
+                                <a href="/CV-Manuel-Villanueva.pdf" download="CV-Manuel-Villanueva-Desarrollador.pdf" class="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-emerald-600 rounded-lg shadow-lg hover:bg-emerald-700 transition-all duration-300 transform hover:-translate-y-0.5"><Download size={18} /> Descargar CV</a>
+                                <!-- Ver CV en nueva pestaña -->
+                                <a href="/CV-Manuel-Villanueva.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-gray-300 bg-gray-800/50 border border-gray-700 rounded-lg shadow-lg hover:bg-gray-800 hover:text-white transition-all duration-300 transform hover:-translate-y-0.5"><Eye size={18} /> Ver CV</a>
+                            </div>
+                            <!-- Enlaces sociales: GitHub, LinkedIn, email y WhatsApp -->
+                            <div class="flex justify-center md:justify-start space-x-6">
+                                <a href="https://github.com/Manupo12" target="_blank" class="text-gray-400 hover:text-emerald-400 transition-colors" aria-label="GitHub"><Github size={28} /></a>
+                                <a href="https://www.linkedin.com/in/villanueva-kotlin/" target="_blank" class="text-gray-400 hover:text-emerald-400 transition-colors" aria-label="LinkedIn"><Linkedin size={28} /></a>
+                                <a href="mailto:manup121223@gmail.com" class="text-gray-400 hover:text-emerald-400 transition-colors" aria-label="Correo electrónico"><Mail size={28} /></a>
+                                <!-- WhatsApp: se usa el SVG importado y la constante WHATSAPP_URL -->
+                                <a href={WHATSAPP_URL} target="_blank" class="text-gray-400 hover:text-emerald-400 transition-colors" aria-label="WhatsApp">
+                                    <div class="[&>svg]:w-7 [&>svg]:h-7" set:html={WhatsAppIcon} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Columna de imagen/animación de perfil -->
+                    <div class="flex justify-center items-center">
+                        <ProfileImageAnimation src="/images/foto-perfil.webp" alt="Foto de perfil de Manuel Villanueva" client:visible />
+                    </div>
+                </div>
+                <!-- Marquee con habilidades/techs -->
+                <div class="mt-20">
+                    <TechMarquee skills={HABILIDADES} />
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: SOBRE MÍ - descripción extendida -->
+        <section id="sobre-mi" class="min-h-screen flex flex-col justify-center">
+            <AnimateOnScroll client:visible>
+                <div class="py-12 space-y-8">
+                    <div class="text-center">
+                      <TituloSeccion titulo="Sobre Mí" />
+                    </div>
+                    <!-- Párrafos biográficos: motivación, proyecto Vertrex y hobbies -->
+                    <div class="max-w-2xl mx-auto text-center space-y-4">
+                        <p class="text-gray-400 text-lg">Desde que vi las maravillas tecnológicas de los 2000s, supe que había encontrado mi lugar. Esa fascinación de niño es la misma curiosidad que hoy me impulsa a crear software, explorando el mundo del desarrollo web y el de aplicaciones móviles para Android. Mi obsesión es simple: construir interfaces intuitivas y código eficiente que de verdad le sirva a la gente.</p>
+                        <p class="text-gray-400 text-lg">Recientemente fundé Vertrex con una convicción clara: desafiar la idea de que "nadie es profeta en su propia tierra". Quiero generar un cambio real empezando aquí, en Neiva, entregando soluciones rápidas para negocios locales, creando aplicaciones nativas o cualquier pieza de software que resuelva un problema. Al final, todo se resume en convertir una gran idea en un producto funcional y bien hecho.</p>
+                        <p class="text-gray-400 text-lg">Y cuando no estoy programando, seguramente estoy perdido en las últimas tendencias tecnológicas o disfrutando del calor de Neiva con una buena limonada.</p>
+                    </div>
+                </div>
+            </AnimateOnScroll>
+        </section>
+
+        <!-- SECCIÓN: PROYECTOS DESTACADOS - muestra cards/galería de proyectos -->
+        <section id="proyectos" class="min-h-screen flex flex-col justify-center">
+            <AnimateOnScroll client:visible>
+                <div class="py-12 space-y-8">
+                    <div class="text-center">
+                        <TituloSeccion titulo="Proyectos Destacados" />
+                    </div>
+                    <!-- Componente que renderiza la lista/rejilla de proyectos -->
+                    <ProjectShowcase client:visible />
+                </div>
+            </AnimateOnScroll>
+        </section>
+
+        <!-- SECCIÓN: CERTIFICACIONES - tarjetas con cursos y certificaciones -->
+        <section id="certificaciones" class="min-h-screen flex flex-col justify-center">
+            <AnimateOnScroll client:visible>
+                <div class="py-12 space-y-8">
+                    <div class="text-center">
+                        <TituloSeccion titulo="Certificaciones y Formación" />
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {CERTIFICATIONS.map(cert => (
+                            <CardCertification certification={cert} />
+                        ))}
+                    </div>
+                </div>
+            </AnimateOnScroll>
+        </section>
+
+        <!-- SECCIÓN: DEMOS VISUALES - showcase de prototipos y mockups -->
+        <section id="demos" class="min-h-screen flex flex-col justify-center">
+            <AnimateOnScroll client:visible>
+                <div class="py-12 space-y-8">
+                    <div class="text-center">
+                        <TituloSeccion titulo="Demos Visuales" />
+                    </div>
+                    <p class="text-center text-gray-400 max-w-3xl mx-auto -mt-4">
+                        Este es un servicio que ofrezco a través de mi emprendimiento, Vertrex. Junto a un talentoso equipo, y aportando personalmente en cada detalle del desarrollo, creamos prototipos visuales para que los clientes puedan ver el potencial de su proyecto antes de comprometerse.
+                    </p>
+                    <div class="mt-8">
+                        <DemoShowcase client:visible />
+                    </div>
+                </div>
+            </AnimateOnScroll>
+        </section>
+        
+        <!-- SECCIÓN: CONTACTO - componente con form, enlaces y CTA -->
+        <section id="contacto" class="min-h-screen flex flex-col justify-center">
+            <AnimateOnScroll client:visible>
+                <div class="py-12">
+                    <Contacto />
+                </div>
+            </AnimateOnScroll>
+        </section>
+
+    </main>
+
+    <!-- Pie de página global -->
+    <Footer />
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+---
+// src/components/Footer.astro
+// Componente: Footer
+// Descripción (español): Pie de página simple que muestra el año actual y un
+// aviso de derechos. Se calcula el año dinámicamente con `new Date().getFullYear()`.
+// Nota: No se modifica la lógica; sólo se añaden comentarios para facilitar
+// la comprensión.
+const year = new Date().getFullYear();
+---
+<!-- Pie de página: muestra el año dinámico y el texto de derechos reservados -->
+<footer class="text-center py-8">
+    <p class="text-gray-500 text-sm">
+        © {year} Manuel Villanueva. Todos los derechos reservados.
+    </p>
+</footer>

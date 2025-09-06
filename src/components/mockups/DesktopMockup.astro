@@ -1,0 +1,27 @@
+---
+// Un componente para envolver contenido en un marco de monitor de escritorio.
+// Explicación (español):
+// - Este componente es un "mockup" visual que crea un marco con aspecto de
+//   monitor/monitor de escritorio alrededor de su contenido.
+// - El contenido real se pasa mediante el slot estándar de Astro: <slot />.
+// - No recibe props; actúa como contenedor visual reutilizable.
+// - Clases Tailwind utilizadas:
+//   - `max-w-2xl mx-auto`: centra y limita el ancho del mockup.
+//   - `aspect-video`: fuerza la relación de aspecto del área de contenido (16:9).
+//   - Las sombras, bordes y los div inferiores forman la base/peana del monitor.
+---
+<div class="w-full max-w-2xl mx-auto">
+    <!-- Marco principal del monitor -->
+    <div class="relative bg-gray-800 rounded-t-2xl shadow-2xl shadow-emerald-900/30 border-x-4 border-t-4 border-gray-900 overflow-hidden">
+        <!-- Área interior con relación de aspecto 16:9 donde se coloca el contenido -->
+        <div class="aspect-video">
+            <!-- Slot: el componente padre inyecta aquí su contenido (imagen, video, demo, iframe, etc.) -->
+            <slot />
+        </div>
+    </div>
+
+    <!-- Pie/peana del monitor: una banda horizontal que simula la base -->
+    <div class="h-4 w-full bg-gray-900"></div>
+    <!-- Peana inferior central: bloque más pequeño centrado que da sensación de soporte -->
+    <div class="h-3 w-40 mx-auto bg-gray-800 rounded-b-lg"></div>
+</div>

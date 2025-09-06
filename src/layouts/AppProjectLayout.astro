@@ -1,0 +1,127 @@
+---
+
+// - Layout específico para páginas de tipo "app". Envuelve el contenido
+//   del proyecto con Header/Footer y provee las secciones: metadata, cabecera,
+//   descripción, tecnologías, galería y enlaces finales.
+// - Importante: pasa `projectType` a `ProjectGallery` para que esta adapte
+//   su comportamiento (por ejemplo, mostrar mockups de móvil vs web).
+
+// Imports de componentes y utilidades usados por el layout
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TechIcon from '../components/TechIcon.astro';
+import { ProjectGallery } from '../components/ProjectGallery.tsx';
+import AnimateOnScroll from '../components/AnimateOnScroll.jsx';
+import { Play, Github, Calendar, Code, CheckCircle } from 'lucide-react';
+import type { Project } from '../data/types.ts';
+import '../styles/global.css';
+
+// Props esperadas: frontmatter contiene todos los campos del proyecto.
+interface Props { 
+    frontmatter: Project | undefined; 
+}
+const { frontmatter } = Astro.props;
+
+// Si no hay frontmatter válido, redirigimos a la página principal. Esto evita
+// renderizar una página de proyecto vacía o con datos incompletos.
+if (!frontmatter) { 
+    return Astro.redirect('/'); 
+}
+
+// Desestructuramos sólo las propiedades que necesitamos del frontmatter.
+// Estas variables se usan más abajo para mostrar título, fechas, enlaces, etc.
+const { 
+    titulo, subtitulo, startDate, projectType, status, 
+    playStoreUrl, githubUrl, media, technologies, iconSrc 
+} = frontmatter;
+---
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{titulo} | Mi Portafolio</title>
+    <meta name="description" content={subtitulo} />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-950 text-gray-200 font-sans">
+    <div class="absolute inset-0 -z-10 h-full w-full bg-gray-950 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:32px_32px]"></div>
+    <Header />
+    <!-- Contenedor principal: centra el contenido y aplica paddings verticales -->
+    <main class="max-w-5xl mx-auto px-6 py-20 pt-28">
+        <article class="flex flex-col space-y-12">
+            <header>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
+                    <!-- Icono del proyecto (opcional): se muestra en pantallas md+ -->
+                    {iconSrc && (
+                        <div class="md:col-span-1 flex justify-center md:justify-start">
+                            <img src={iconSrc} alt={`Icono de ${titulo}`} class="w-32 h-32 md:w-40 md:h-40 rounded-3xl shadow-lg border-2 border-gray-800" />
+                        </div>
+                    )}
+                    <div class="md:col-span-3">
+                        <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-white text-center md:text-left">{titulo}</h1>
+                        <p class="text-lg text-emerald-400 text-center md:text-left mt-2">{subtitulo}</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-4 mt-8 border-b border-gray-800 pb-8">
+                    <!-- Metadatos del proyecto: fecha de inicio, tipo de proyecto y estado -->
+                    {startDate && <div class="flex items-center gap-2 text-gray-400"><Calendar size={18}/><span>{startDate}</span></div>}
+                    {projectType && <div class="flex items-center gap-2 text-gray-400"><Code size={18}/><span>{projectType}</span></div>}
+                    {status && <div class="flex items-center gap-2 text-gray-400"><CheckCircle size={18}/><span>{status}</span></div>}
+                </div>
+            </header>
+
+            <div class="prose prose-invert prose-lg max-w-3xl mx-auto prose-p:text-gray-300">
+                <AnimateOnScroll client:visible>
+                    <slot />
+                </AnimateOnScroll>
+            </div>
+            
+            {technologies && technologies.length > 0 && (
+                <div class="max-w-3xl mx-auto">
+                    <AnimateOnScroll client:visible>
+                        <h3 class="text-2xl font-bold text-white text-center mb-8">Tecnologías Utilizadas</h3>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <!-- Lista de tecnologías: cada una renderiza un `TechIcon` -->
+                            {technologies.map((tech) => <TechIcon name={tech} />)}
+                        </div>
+                    </AnimateOnScroll>
+                </div>
+            )}
+
+            {media && media.length > 0 && (
+                <div>
+                    <AnimateOnScroll client:visible>
+                        <h3 class="text-2xl font-bold text-white text-center mb-8">Galería</h3>
+                        <!-- Galería de medios del proyecto.
+                             Se pasa `projectType` para que la galería muestre
+                             mockups apropiados (por ejemplo, previews de móvil).
+                        -->
+                        <ProjectGallery media={media} projectType={projectType} client:visible />
+                    </AnimateOnScroll>
+                </div>
+            )}
+
+            <footer class="border-t border-gray-800 pt-10 space-y-8">
+                <AnimateOnScroll client:visible>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <!-- Acciones/CTA al final: enlaces a Play Store y al repositorio si existen -->
+                        {playStoreUrl && <a href={playStoreUrl} target="_blank" class="flex items-center gap-2 text-white bg-emerald-600 hover:bg-emerald-700 font-semibold rounded-lg px-5 py-3 transition-colors"><Play size={20} /> Ver en Play Store</a>}
+                        {githubUrl && <a href={githubUrl} target="_blank" class="flex items-center gap-2 text-gray-300 bg-gray-800 hover:bg-gray-700 font-semibold rounded-lg px-5 py-3 transition-colors"><Github size={20} /> Ver Código</a>}
+                    </div>
+                </AnimateOnScroll>
+                <AnimateOnScroll client:visible>
+                    <div class="text-center">
+                        <!-- Enlace para volver a la lista de proyectos en la página principal -->
+                        <a href="/#proyectos" class="inline-block text-gray-300 hover:text-white font-semibold rounded-lg px-6 py-3 transition-colors">&larr; Volver a Proyectos</a>
+                    </div>
+                </AnimateOnScroll>
+            </footer>
+        </article>
+    </main>
+    <Footer />
+</body>
+</html>

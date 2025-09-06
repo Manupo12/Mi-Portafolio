@@ -1,0 +1,95 @@
+---
+// ARCHIVO: src/components/cards/CardWeb.astro
+// ACTUALIZACIÓN: Añadido un script para un control fiable de la reproducción de video en hover.
+//
+// Descripción (español):
+// Esta plantilla renderiza una tarjeta de proyecto web que muestra una miniatura
+// y un video de previsualización que se reproduce al pasar el cursor. La tarjeta
+// incluye título, descripción, estado (badge) y tags.
+//
+// Props esperadas en `Astro.props`:
+// - link: URL al proyecto o a la página del proyecto
+// - thumbnailSrc: ruta/URL de la imagen miniatura
+// - videoPreviewSrc: ruta/URL del video corto que se reproduce al hover
+// - titulo: título del proyecto
+// - status: string opcional que indica estado ('Publicado' u otro)
+// - descripcion: breve descripción del proyecto
+// - tags: array opcional de etiquetas (strings)
+//
+// Variables auxiliares:
+// - isPublished: boolean que indica si `status` === 'Publicado'
+// - badgeText: texto mostrado en la badge según el estado
+// - badgeClasses: clases de Tailwind para estilizar la badge según el estado
+const { link, thumbnailSrc, videoPreviewSrc, titulo, status, descripcion, tags } = Astro.props;
+
+const isPublished = status === 'Publicado';
+const badgeText = isPublished ? 'Publicado' : 'En Desarrollo';
+const badgeClasses = isPublished 
+    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' 
+    : 'bg-sky-500/20 text-sky-300 border-sky-500/30';
+---
+
+<a
+    href={link}
+    class="web-project-card relative group block bg-gray-900/50 border border-gray-700/60 rounded-xl h-full flex flex-col overflow-hidden hover:bg-gray-800/60 transition-all duration-300"
+>
+    <!-- Contenedor visual superior: miniatura y video de previsualización -->
+    <div class="relative w-full aspect-video">
+        <!-- Imagen miniatura: está por debajo del video y se oculta al hacer hover mediante opacity -->
+        <img src={thumbnailSrc} alt={`Thumbnail de ${titulo}`} class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0" />
+        <!-- Video de vista previa: está oculto por defecto (opacity 0) y aparece al hover -->
+        <video src={videoPreviewSrc} loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100"></video>
+    </div>
+
+    <!-- Contenido de la tarjeta: título, descripción y tags -->
+    <div class="p-6 flex flex-col flex-grow">
+        {/* Badge de estado: se renderiza solo si `status` existe */}
+        {status && (
+            <div class={`absolute top-4 right-4 text-xs font-medium px-2.5 py-1 rounded-full border ${badgeClasses}`}>{badgeText}</div>
+        )}
+
+        <div class="flex-grow">
+            <!-- Título del proyecto -->
+            <h3 class="font-bold text-lg text-white group-hover:text-emerald-400 transition-colors">{titulo}</h3>
+            <!-- Descripción con limitación visual de líneas -->
+            <p class="text-sm text-gray-400 mt-2 line-clamp-2">{descripcion}</p>
+        </div>
+
+        <!-- Tags: se mapean si existen -->
+        <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-gray-800">
+            {tags && tags.map((tag: string) => (
+                <span class="text-xs font-semibold text-emerald-300 bg-emerald-900/50 px-2 py-1 rounded-full">{tag}</span>
+            ))}
+        </div>
+    </div>
+</a>
+
+<script>
+    // Script (explicación en español):
+    // - Selecciona todas las tarjetas con la clase `.web-project-card`.
+    // - Para cada tarjeta, busca el elemento <video> interno. Si no existe, se omite.
+    // - Añade listeners de `mouseenter` y `mouseleave` para controlar la reproducción.
+    //   Esto garantiza un control fiable del play/pause incluso en navegadores que
+    //   no respetan completamente el CSS `:hover` sobre elementos multimedia.
+    // - Al hacer mouseenter: se reproduce el video.
+    // - Al hacer mouseleave: se pausa y se reinicia al inicio (currentTime = 0).
+
+    // Seleccionamos todas las tarjetas de proyectos web en la página.
+    const webCards = document.querySelectorAll('.web-project-card');
+
+    webCards.forEach(card => {
+        const video = card.querySelector('video');
+        if (!video) return; // Si no hay video, no hacemos nada.
+
+        // Cuando el cursor entra en la tarjeta
+        card.addEventListener('mouseenter', () => {
+            video.play();
+        });
+
+        // Cuando el cursor sale de la tarjeta
+        card.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0; // Reinicia el video al principio.
+        });
+    });
+</script>

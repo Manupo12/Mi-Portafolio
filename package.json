@@ -1,0 +1,22 @@
+{
+  "name": "mi-portafolio",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@studio-freight/lenis": "^1.0.42",
+    "@tailwindcss/vite": "^4.1.11",
+    "astro": "^5.13.5",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.539.0",
+    "react": "^19.1.1",
+    "tailwindcss": "^4.1.11",
+    "yet-another-react-lightbox": "^3.25.0"
+  }
+}

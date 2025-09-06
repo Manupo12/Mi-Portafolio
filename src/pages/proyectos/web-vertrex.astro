@@ -1,0 +1,49 @@
+---
+// - Página de proyecto que delega la cabecera y el layout en `WebProjectLayout`.
+// - Contiene el contenido principal del proyecto (parrafos), una sección de
+//   vistas (mockups de escritorio y móvil) y utiliza `PROYECTOS` para obtener
+//   los datos del proyecto por su `id`.
+
+// Imports principales: layout, datos y componentes de mockup / helper
+import WebProjectLayout from '../../layouts/WebProjectLayout.astro';
+import { PROYECTOS } from '../../data/projects.tsx';
+import PhoneMockup from '../../components/mockups/PhoneMockup.astro';
+import DesktopMockup from '../../components/mockups/DesktopMockup.astro';
+import TituloSeccion from '../../components/TituloSeccion.astro';
+
+// Buscamos en el array `PROYECTOS` el objeto que tiene el id 'web-vertrex'.
+// Esta constante `projectData` puede ser `undefined` si no existe el proyecto,
+// pero el layout se encarga de la redirección si falta `frontmatter`.
+const projectData = PROYECTOS.find(p => p.id === 'web-vertrex');
+---
+<WebProjectLayout frontmatter={projectData}>
+    <!-- Contenido principal: párrafos del proyecto (se espera un array `contenido`) -->
+    <div class="prose prose-invert prose-lg max-w-3xl mx-auto my-12 prose-p:text-gray-300">
+        {projectData?.contenido.map(parrafo => (
+            <!-- Cada elemento del array `contenido` se renderiza como un párrafo -->
+            <p>{parrafo}</p>
+        ))}
+    </div>
+
+    <!-- Título de la sección de vistas / mockups -->
+    <div class="text-center mb-12">
+        <TituloSeccion titulo="Vistas del Proyecto" />
+    </div>
+    
+    <!-- Grid de mockups: en pantallas grandes ocupa 5 columnas, con Desktop + Phone -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+        <!-- Mockup de escritorio: ocupa 3 columnas en lg -->
+        <div class="lg:col-span-3 order-2 lg:order-1">
+            <DesktopMockup>
+                <!-- Video demo en bucle, sin audio y optimizado para reproducción inline -->
+                <video src="/videos/vertrex/demo-desktop.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+            </DesktopMockup>
+        </div>
+        <!-- Mockup de teléfono: ocupa 2 columnas en lg -->
+        <div class="lg:col-span-2 order-1 lg:order-2">
+            <PhoneMockup>
+                <video src="/videos/vertrex/demo-mobile.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+            </PhoneMockup>
+        </div>
+    </div>
+</WebProjectLayout>

@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    // --- [INICIO DE LA CORRECCIÓN] ---
+    // Estas dos líneas le enseñan a TypeScript a entender React.
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+    // --- [FIN DE LA CORRECCIÓN] ---
+  },
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}

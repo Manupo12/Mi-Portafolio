@@ -1,0 +1,26 @@
+---
+// Un componente para envolver contenido (imágenes o videos) en un marco de teléfono.
+// Explicación completa en español:
+// - Propósito: servir como un mockup visual que presenta cualquier contenido
+//   (imagen, video, iframe, demo) dentro de un marco con forma de teléfono.
+// - Uso: el componente padre inyecta contenido dentro del área mediante <slot />.
+// - No recibe props; es puramente presentacional y reutilizable.
+// - Clases Tailwind relevantes:
+//   - `max-w-[250px] md:max-w-[300px] mx-auto`: limita y centra el ancho del mockup.
+//   - `aspect-[9/19.5]`: fuerza una relación de aspecto típica de teléfono.
+//   - `rounded-[40px]` y `rounded-[32px]`: curvas para simular el marco del dispositivo.
+//   - Los elementos absolutos adicionales simulan la muesca / peana superior del teléfono.
+---
+<div class="w-full max-w-[250px] md:max-w-[300px] mx-auto">
+</div>
+    <!-- Cuerpo del teléfono: marco con sombra y bordes redondeados -->
+    <div class="relative aspect-[9/19.5] bg-gray-800 rounded-[40px] shadow-2xl shadow-emerald-900/30 border-4 border-gray-900 overflow-hidden">
+        <!-- Área interior (con padding interno mediante `inset-2`) donde va el contenido real -->
+        <div class="absolute inset-2 rounded-[32px] overflow-hidden">
+            <!-- Slot: el componente padre inserta aquí la imagen/video/iframe -->
+            <slot />
+        </div>
+        <!-- Elemento decorativo superior centrado: simula la muesca o la parte superior del teléfono -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-6 bg-gray-900 rounded-b-lg"></div>
+    </div>
+</div>

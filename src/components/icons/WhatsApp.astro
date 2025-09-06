@@ -1,0 +1,36 @@
+---
+// Versión Definitiva. Usa fill-rule="evenodd" para garantizar el recorte correcto de la forma.
+// Archivo: src/components/icons/WhatsApp.astro
+// Descripción (español): Icono SVG reutilizable de WhatsApp.
+// Props:
+//   - size (number|string): controla el ancho y alto del SVG (por defecto 24).
+//   - ...rest: cualquier otro atributo que se quiera pasar al elemento <svg>
+// Nota: No se debe cambiar la estructura del SVG ni los atributos de los <path>
+//       porque eso alteraría la apariencia del icono.
+const { size = 24, ...rest } = Astro.props;
+---
+<!--
+  SVG del icono de WhatsApp (comentarios en español):
+  - 'width' y 'height' usan la prop 'size' para escalar el icono.
+  - 'viewBox' mantiene la relación de aspecto original del SVG.
+  - 'fill="currentColor"' permite que el icono herede el color desde CSS/HTML.
+  - El atributo 'fill-rule="evenodd"' en el <g> es importante para el recorte correcto
+    de las formas compuestas dentro del grupo.
+  - Los elementos <path> contienen las coordenadas exactas del icono y no deben modificarse.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  {...rest}
+>
+  <g fill="currentColor" fill-rule="evenodd">
+    <path
+      d="M18.425 5.576a9.914 9.914 0 00-14.02 14.02 9.914 9.914 0 0014.02-14.02zM12.002 2.131c5.454 0 9.888 4.434 9.888 9.888s-4.434 9.888-9.888 9.888-9.888-4.434-9.888-9.888c0-5.454 4.434-9.888 9.888-9.888z"
+    ></path>
+    <path
+      d="M15.018 13.034c-.16-.08-1.043-.513-1.206-.572s-.28-.088-.396.088c-.117.176-.454.572-.553.688-.1.117-.198.132-.357.044s-1.29-.472-2.456-1.52c-.908-.813-1.51-1.823-1.658-2.128-.149-.305-.015-.464.073-.552.08-.08.176-.208.264-.31s.117-.176.176-.293c.06-.117.03-.22-.014-.308-.044-.088-.396-1.042-.544-1.428-.14-.378-.28-.323-.396-.323h-.264c-.117 0-.31.044-.47.22-.16.176-.604.593-.604 1.45.001.857.618 1.685.703 1.793.085.103 1.22 1.88 3.003 2.65.419.176.74.28 1.01.37.33.1.666.085.89-.057.264-.158.918-.423 1.048-.77.13-.346.13-.645.088-.733-.044-.088-.16-.132-.28-.22z"
+    ></path>
+  </g>
+</svg>
