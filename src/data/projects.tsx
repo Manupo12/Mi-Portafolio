@@ -71,7 +71,7 @@ export const PROYECTOS: Project[] = [
         githubUrl: 'https://github.com/Manupo12/Vertrex-Website',
         liveUrl: 'https://vertrex-website.vercel.app',
         technologies: ['Next.js', 'React', 'TypeScript', 'Tailwindcss', 'Framer Motion', 'react-icons', 'react-type-animation', 'Embla Carousel', 'Web3Forms', 'Vercel'],
-        media: [],
+        media: [{ type: 'video', src: '/videos/opita-go/opitago.mp4', alt: 'Video demo de Opita Go', orientation: 'landscape' },],
         contenido: [
             'Vertrex S.C. requería una presencia digital que reflejara su enfoque moderno y multifacético. El desafío era construir una plataforma web que sirviera como núcleo para soluciones digitales, captación de clientes y futuras verticales de negocio.',
         ],
