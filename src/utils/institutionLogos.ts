@@ -12,7 +12,7 @@ const logos: Record<string, string> = import.meta.glob('/src/assets/institutions
 
 export const LOGO_MAP: Map<string, string> = new Map();
 
-// Rellenamos el mapa dinámicamente.
+// Rellenamos el mapa dinámicamente
 for (const path in logos) {
     const fileName = path.split('/').pop()?.split('.')[0];
     if (fileName) {
