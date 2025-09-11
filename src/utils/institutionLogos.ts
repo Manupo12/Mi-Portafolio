@@ -1,22 +1,18 @@
 // src/utils/institutionLogos.ts
-// FECHA: 10 de septiembre de 2025
-// DESCRIPCIÓN: Mapeo centralizado de logos. CORREGIDO para funcionar en producción.
+// FECHA: 11 de septiembre de 2025
+// DESCRIPCIÓN: Mapeo explícito y robusto de logos de instituciones.
 
-// [CAMBIO] Añadimos opciones a glob para que nos devuelva la URL final del archivo procesado, no la ruta original.
-// eager: true -> Importa los módulos inmediatamente.
-// import: 'default' -> Nos da directamente la URL final como un string.
-const logos: Record<string, string> = import.meta.glob('/src/assets/institutions/*.{svg,png,jpg,jpeg,webp}', { 
-    eager: true,
-    import: 'default' 
-});
+// [CAMBIO] Importamos cada logo de forma individual y explícita.
+// Astro/Vite procesará estas imágenes y nos dará la ruta final correcta.
+import senaLogo from '../assets/institutions/sena.png';
 
-export const LOGO_MAP: Map<string, string> = new Map();
 
-// Rellenamos el mapa dinámicamente
-for (const path in logos) {
-    const fileName = path.split('/').pop()?.split('.')[0];
-    if (fileName) {
-        // Ahora, "logos[path]" contiene la ruta final y correcta, como "/assets/sena.a1b2c3d4.svg"
-        LOGO_MAP.set(fileName, logos[path]);
-    }
-}
+// [CAMBIO] Creamos el mapa manualmente. Es más claro y menos propenso a errores.
+export const LOGO_MAP: Map<string, typeof senaLogo> = new Map([
+    ['sena', senaLogo],
+    // Nota para futuros desarrolladores:
+    // Si añades un nuevo logo en el futuro, solo tienes que:
+    // 1. Añadir el archivo en 'src/assets/institutions/'.
+    // 2. Importarlo aquí arriba.
+    // 3. Añadir una nueva línea al mapa aquí abajo.
+]);

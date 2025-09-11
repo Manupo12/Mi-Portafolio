@@ -1,22 +1,13 @@
 ---
+// ARCHIVO: src/components/cards/CardCertification.astro
+// FECHA: 11 de septiembre de 2025
+// DESCRIPCIÓN: Versión final de la tarjeta de certificación con sintaxis corregida.
+
 import type { Certification } from '../../data/types';
 import { ExternalLink } from 'lucide-react';
-import { LOGO_MAP } from '../../utils/institutionLogos.ts'; // <-- [1] Importamos nuestro mapa de logos
+import { LOGO_MAP } from '../../utils/institutionLogos.ts';
 
-// Frontmatter (explicación completa en español):
-// - `Certification`: tipo TypeScript que describe la forma del objeto `certification`.
-// - `ExternalLink`: icono reutilizable desde la librería `lucide-react`.
-// - `LOGO_MAP`: un Map (clave: nombre de institución, valor: ruta del logo) usado
-//   para resolver y mostrar los logos dentro de la tarjeta.
-// - `Astro.props`: obtenemos la prop `certification` pasada desde el componente padre.
 const { certification } = Astro.props as { certification: Certification };
-// Desestructuramos los campos principales que usaremos en el template:
-// - titulo: nombre del certificado
-// - institucion: nombre de la institución que emite el certificado
-// - fecha: fecha del certificado (string ya formateado)
-// - thumbnailSrc: ruta/URL de la miniatura del certificado
-// - pdfSrc: ruta/URL al PDF descargable o vista del certificado
-// - institutionLogos: array opcional con los nombres de las instituciones para renderizar logos
 const { titulo, institucion, fecha, thumbnailSrc, pdfSrc, institutionLogos } = certification;
 ---
 <a
@@ -26,9 +17,7 @@ const { titulo, institucion, fecha, thumbnailSrc, pdfSrc, institutionLogos } = c
     class="group block bg-gray-900/50 border border-gray-700/60 rounded-xl overflow-hidden
            hover:border-emerald-400/50 hover:-translate-y-1 transition-all duration-300"
 >
-    <!-- Contenedor visual de la miniatura del certificado -->
     <div class="aspect-[4/3] overflow-hidden border-b border-gray-700/60">
-        <!-- Imagen miniatura: se escala ligeramente al hacer hover para dar dinamismo -->
         <img
             src={thumbnailSrc}
             alt={`Certificado de ${titulo}`}
@@ -36,39 +25,24 @@ const { titulo, institucion, fecha, thumbnailSrc, pdfSrc, institutionLogos } = c
         />
     </div>
 
-    <!-- Sección de contenido: título, institución y zona inferior con logos/fecha -->
     <div class="p-4 flex flex-col flex-grow">
         <div class="flex-grow">
-            <!-- Título del certificado. `line-clamp-2` limita visualmente a 2 líneas -->
             <h3 class="font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2">{titulo}</h3>
-            <!-- Nombre de la institución emisora -->
             <p class="text-sm text-gray-400">{institucion}</p>
         </div>
 
-        <!-- Zona inferior: logos de instituciones (si existen) y fecha -->
         <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-800">
-            <div class="flex items-center gap-2">
-                <!--
-                    institutionLogos es opcional. Si existe, iteramos sobre cada nombre
-                    y resolvemos la ruta con LOGO_MAP.get(logoName).
-                    - Si LOGO_MAP no contiene la clave, devolvemos null para no renderizar nada.
-                    - Cada <img> resultante muestra el logo correspondiente con altura fija.
-                -->
-                {institutionLogos && institutionLogos.map(logoName => {
-                    // Obtenemos la ruta del logo desde el mapa
+            <div class="flex items-center gap-2 h-5">
+                {institutionLogos?.map(logoName => {
                     const logoSrc = LOGO_MAP.get(logoName);
-                    // Si no existe la ruta, retornamos null (no renderizar nada)
-                    if (!logoSrc) return null;
-                    // Renderizamos la imagen del logo con una altura controlada
-                    return <img src={logoSrc} alt={`Logo de ${logoName}`} class="h-5 w-auto" />;
+                    // Sintaxis corregida para Astro: se devuelve el HTML directamente.
+                    return logoSrc ? <img src={logoSrc.src} alt={`Logo de ${logoName}`} class="h-full w-auto" /> : null;
                 })}
             </div>
-            <!-- Fecha del certificado, con `flex-shrink-0` para evitar que se comprima -->
             <p class="text-sm font-semibold text-gray-500 flex-shrink-0">{fecha}</p>
         </div>
     </div>
 
-    <!-- Icono que indica que el enlace abre un recurso externo (PDF). Se muestra solo al hover -->
     <div class="absolute top-3 right-3 p-1.5 bg-gray-950/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <ExternalLink size={16} className="text-emerald-400" />
     </div>
